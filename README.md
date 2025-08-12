@@ -1,12 +1,59 @@
-# React + Vite
+# Portfolio React
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A personal portfolio website built with React to showcase skills, projects, and contact information.
 
-Currently, two official plugins are available:
+## Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+[Live Demo](https://vijayakanthang.netlify.app/)
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Responsive design for desktop and mobile
+- Hero section with animated typewriter effect
+- About section with skills, education, and languages including icons
+- Projects section showcasing project cards
+- Contact form integrated with EmailJS for sending messages
+- Smooth scrolling and animated UI elements using Framer Motion
+- Social media links with icons
+
+## Tech Stack
+
+- React
+- CSS (with custom variables for theming)
+- Framer Motion (for animations)
+- React Icons (for icons)
+- EmailJS (for contact form email sending)
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js and npm installed
+
+### Installation
+```
+bash
+git clone https://github.com/vijayakanthang/Portfolio-React.git
+cd Portfolio-React
+npm install
+npm start
+```
+
+## Getting Started
+
+Open [http://localhost:3000](http://localhost:3000) to view the project in the browser.
+
+## Project Structure
+
+- src/ - React components and pages
+- src/styles/ - CSS files
+- public/ - Static assets
+- package.json - Project dependencies and scripts
+
+## Contact
+
+Feel free to reach out via the contact form on the website or through:
+
+- Email: vijayakanthang@gmail.com
+- GitHub: [vijayakanthang](https://github.com/vijayakanthang)
+- LinkedIn: [VijayaKanthan G](https://linkedin.com/in/vijayakanthang)
