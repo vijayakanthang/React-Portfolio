@@ -2,8 +2,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 2rem;
-    height: 10vh;
+    padding: 0.5rem 2rem;
+    height: 12vh;
     background: transparent;
     backdrop-filter: blur(8px);
     color: var(--text-color);
@@ -29,7 +29,7 @@
 .nav-links {
     display: flex;
     list-style: none;
-    gap: 2rem;
+    gap: 3rem;
 }
 
 .nav-links a {
@@ -67,9 +67,13 @@
     flex-direction: column;
     padding: 0.5rem ;
   }
+  a{
+    /* background: #f7f5b140; */
+    border-radius: 10px;padding: 4px;
+  }
   .nav-links {
     flex-direction: row;
-    gap: 0.5rem;
+    gap: 1rem;
     padding-bottom: 10px;
   }
   .nav-links li {
