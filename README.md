@@ -4,7 +4,7 @@ A personal portfolio website built with React to showcase skills, projects, and 
 
 ## Demo
 
-[Live Demo](https://your-portfolio-url.vercel.app)
+[Live Demo](https://vijayakanthang.netlify.app/)
 
 ## Features
 
