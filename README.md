@@ -31,12 +31,13 @@ A personal portfolio website built with React to showcase skills, projects, and 
 - Node.js and npm installed
 
 ### Installation
-
+```
 bash
 git clone https://github.com/vijayakanthang/Portfolio-React.git
 cd Portfolio-React
 npm install
 npm start
+```
 
 ## Getting Started
 
