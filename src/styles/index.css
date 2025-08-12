@@ -1,0 +1,207 @@
+/* ===== main.css ===== */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-padding-top: 10vh;
+    scroll-behavior: smooth;
+}
+
+body {
+    scroll-padding-top: 10vh;
+    font-family: "Poppins", sans-serif;
+    transition: background 0.4s ease, color 0.4s ease;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+  scroll-padding-top: 40px; /* Adjust to your navbar height */
+
+}
+
+section,
+#hero-page {
+  min-height: 100vh; /* Full screen height */
+  display: flex; /* optional, for centering */
+  align-items: center;
+  justify-content: center;
+}
+
+#hero-page {
+  position: relative; /* so FloatingIcons works well */
+}
+
+/* ===== THEME: Default Dark Gold ===== */
+.theme-default {
+    --bg-color: #0E0E0E;
+    --text-color: #F5F5F5;
+    --accent-color: #FFD60A;
+    --accent-color-2: #FFB703;
+    --accent-gradient: linear-gradient(90deg, #FFD60A, #FFB703);
+    --border-radius: 1rem;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+/* ===== THEME: Cyber Neon =====
+.theme-cyber {
+    --bg-color: #050505;
+    --text-color: #EAEAEA;
+    --accent-color: #00FF9D;
+    --accent-color-2: #00D1FF;
+    --accent-gradient: linear-gradient(90deg, #00FF9D, #00D1FF);
+    --border-radius: 1rem;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+} */
+
+a {
+    color: var(--text-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--accent-color);
+}
+
+body {
+  transition: background-color 0.4s ease, color 0.4s ease;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+/* General mobile styles for phones */
+@media (max-width: 480px) {
+  
+  /* ===== About Page ===== */
+  #about {
+    padding: 3rem 1rem;
+  }
+
+  .about-container {
+    max-width: 100%;
+    gap: 2rem;
+  }
+
+  .about-intro h2,
+  .about-education h3,
+  .about-skills h3,
+  .about-languages h3 {
+    font-size: 1.8rem;
+  }
+
+  .summary {
+    font-size: 1rem;
+  }
+
+  .skills-grid {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .skill-card {
+    flex: 1 1 100%;
+    padding: 0.8rem;
+  }
+
+  .skill-name {
+    font-size: 1rem;
+  }
+
+  /* ===== Navigation Bar ===== */
+  #desktop-nav {
+    padding: 0 1rem;
+    height: 12vh;
+    font-size: 1rem;
+  }
+
+  .logo {
+    font-size: 1.5rem;
+  }
+
+  .nav-links {
+    gap: 1rem;
+  }
+
+  /* ===== Hero Page ===== */
+  #hero-page {
+    height: auto;
+    padding: 3rem 1rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .text1,
+  .text2 {
+    font-size: 1rem;
+  }
+
+  .button-container {
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .btn {
+    width: 100%;
+    padding: 0.8rem;
+    font-size: 1rem;
+  }
+
+  #socials-container {
+    gap: 1rem;
+  }
+
+  /* ===== Projects Page ===== */
+  #projects {
+    padding: 3rem 1rem;
+  }
+
+  .projects-container {
+    max-width: 100%;
+  }
+
+  .projects-grid {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .project-card {
+    width: 100%;
+  }
+
+  .project-info h3 {
+    font-size: 1.5rem;
+  }
+
+  /* ===== Contact Page ===== */
+  #contact {
+    padding: 3rem 1rem;
+  }
+
+  .contact-content {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .contact-container h2 {
+    font-size: 2rem;
+  }
+
+  .contact-form input,
+  .contact-form textarea {
+    font-size: 1rem;
+  }
+
+  .btn {
+    font-size: 1rem;
+  }
+}

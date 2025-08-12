@@ -1,0 +1,113 @@
+#projects {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  padding: 5rem 2rem;
+}
+
+.projects-container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.projects-container h2 {
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.highlight {
+  color: var(--accent-color);
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+}
+
+.project-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+}
+
+.project-image {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+}
+
+.project-info {
+  padding: 1.5rem;
+}
+
+.project-info h3 {
+  margin-bottom: 0.5rem;
+  color: var(--accent-color);
+}
+
+.project-tech {
+  margin: 1rem 0;
+}
+
+.tech-tag {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.3rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  margin-right: 0.5rem;
+}
+
+.project-links  {
+  display: flex;
+  min-width: 120px;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  text-align: center;
+  
+}
+
+.btnn {
+  background: var(--accent-color);
+  color: var(--bg-color);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  height: fit-content;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.btn-outline {
+  border: 1px solid var(--accent-color);
+  color: var(--accent-color);
+  padding: 0.5rem 1rem;
+  height: fit-content;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  
+}
+
+.btn-outline:hover {
+  background: var(--accent-color);
+  color: var(--bg-color);
+}
+
+/* Slick Carousel overrides */
+.slick-prev, .slick-next {
+  z-index: 2;
+}
+.slick-dots li button:before {
+  color: var(--accent-color);
+}
