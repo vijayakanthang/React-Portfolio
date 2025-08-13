@@ -7,48 +7,51 @@ export default function Navbar() {
   const [isSticky, setIsSticky] = useState(false);
   const [currentSection, setCurrentSection] = useState("Vijayakanthan G");
 
-  useEffect(() => {
-    document.body.className = theme;
+useEffect(() => {
+  document.body.className = theme;
 
-    const handleScroll = () => {
-      setIsSticky(window.scrollY > 50);
-    };
-    window.addEventListener("scroll", handleScroll);
+  const handleScroll = () => {
+    setIsSticky(window.scrollY > 50);
+  };
+  window.addEventListener("scroll", handleScroll);
 
-    const sections = document.querySelectorAll("section, #hero-page");
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            switch (entry.target.id) {
-              case "hero-page":
-                setCurrentSection("Vijayakanthan G");
-                break;
-              case "about":
-                setCurrentSection("About Me");
-                break;
-              case "projects":
-                setCurrentSection("Projects");
-                break;
-              case "contact":
-                setCurrentSection("Let’s Talk");
-                break;
-              default:
-                setCurrentSection("Vijayakanthan G");
-            }
+  const sections = document.querySelectorAll("section, #hero-page");
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          switch (entry.target.id) {
+            case "hero-page":
+              setCurrentSection("Vijayakanthan G");
+              break;
+            case "about":
+              setCurrentSection("About Me");
+              break;
+            case "projects":
+              setCurrentSection("Projects");
+              break;
+            case "contact":
+              setCurrentSection("Let’s Talk");
+              break;
+            default:
+              setCurrentSection("Vijayakanthan G");
           }
-        });
-      },
-      { threshold: 0.6 }
-    );
+        }
+      });
+    },
+    {
+      threshold: 0.25, // Trigger earlier
+      rootMargin: "-50px 0px -50px 0px" // Offset for fixed navbar top & bottom
+    }
+  );
 
-    sections.forEach((sec) => observer.observe(sec));
+  sections.forEach((sec) => observer.observe(sec));
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      sections.forEach((sec) => observer.unobserve(sec));
-    };
-  }, [theme]);
+  return () => {
+    window.removeEventListener("scroll", handleScroll);
+    sections.forEach((sec) => observer.unobserve(sec));
+  };
+}, [theme]);
 
   // Smooth scroll with navbar offset
   const handleNavClick = (e, id) => {
