@@ -22,7 +22,7 @@
     position: absolute;
     width: 200%;
     height: 200%;
-    background: linear-gradient(45deg, #ff4d4d, #ff9a00, #4dff4d, #4d4dff, #ff4df3);
+    background: linear-gradient(45deg, #0f2027, #203a43, #2c5364, #1a1a2e, #16213e);
     background-size: 400% 400%;
     animation: gradientMove 15s ease infinite;
     z-index: 0;
