@@ -41,7 +41,7 @@ export default function ContactPage() {
           <p>Whether you have a question or just want to say hi, I’ll try my best to get back to you!</p>
           <div className="social-links">
             <a href="https://github.com/vijayakanthang" target="_blank" rel="noopener noreferrer"><FaGithub /></a>
-            <a href="https://linkedin.com/in/vijayakanthan-g" target="_blank" rel="noopener noreferrer"><FaLinkedin /></a>
+            <a href="https://linkedin.com/in/vijayakanthang" target="_blank" rel="noopener noreferrer"><FaLinkedin /></a>
             <a href="https://vijayakanthan-protfolio.vercel.app/" target="_blank" rel="noopener noreferrer"><FaGlobe /></a>
           </div>
         </div>
