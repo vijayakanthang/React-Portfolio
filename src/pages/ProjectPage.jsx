@@ -1,5 +1,6 @@
 import React from "react";
 import Slider from "react-slick";
+import { motion } from "framer-motion";
 import "../styles/Project.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -24,11 +25,7 @@ export default function ProjectPage() {
             title: "Strings (MERN)",
             description: "A social media platform for text-based communication with authentication and modern UI.",
             tech: ["MongoDB", "Express", "React", "Node.js"],
-            images: [
-                "/st-login.png",
-                "/st-addnew.png",
-                "/st-home.png",
-            ],
+            images: ["/st-login.png", "/st-addnew.png", "/st-home.png"],
             github: "https://github.com/vijayakanthang/Strings",
             live: "https://strings-social.vercel.app/"
         },
@@ -36,11 +33,7 @@ export default function ProjectPage() {
             title: "Inventory Management System (MERN)",
             description: "Beginner-level inventory app with Chart.js graphs, MongoDB aggregation, and API seeding.",
             tech: ["MongoDB", "Express", "React", "Node.js", "Chart.js"],
-            images: [
-                "/inv-home.png",
-                "/inv-additem.png",
-                "/inv-graph.png"
-            ],
+            images: ["/inv-home.png", "/inv-additem.png", "/inv-graph.png"],
             github: "https://github.com/vijayakanthang/ProductSales-Inventory",
             live: "https://product-sales-inventory.vercel.app/"
         },
@@ -56,9 +49,7 @@ export default function ProjectPage() {
             title: "Task Manager",
             description: "My first project, built to learn HTML, CSS, and JavaScript basics.",
             tech: ["HTML", "CSS", "JavaScript"],
-            images: [
-                "/taskmanger.png"
-            ],
+            images: ["/taskmanger.png"],
             github: "https://github.com/vijayakanthang/Task-Manager--1",
             live: "https://vijayakanthang.github.io/Task-Manager--1/"
         },
@@ -67,14 +58,33 @@ export default function ProjectPage() {
     return (
         <section id="projects">
             <div className="projects-container">
-                <h2>My <span className="highlight">Projects</span></h2>
+                <motion.h2
+                    initial={{ opacity: 0, y: -30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                    viewport={{ once: true }}
+                >
+                    My <span className="highlight">Projects</span>
+                </motion.h2>
+
                 <div className="projects-grid">
                     {projectData.map((project, index) => (
-                        <div className="project-card" key={index}>
+                        <motion.div
+                            className="project-card"
+                            key={index}
+                            initial={{ opacity: 0, y: 50 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.7, delay: index * 0.2 }}
+                            viewport={{ once: true, amount: 0.3 }}
+                        >
                             <Slider {...settings}>
                                 {project.images.map((img, i) => (
                                     <div key={i}>
-                                        <img src={img} alt={`${project.title} ${i + 1}`} className="project-image" />
+                                        <img
+                                            src={img}
+                                            alt={`${project.title} ${i + 1}`}
+                                            className="project-image"
+                                        />
                                     </div>
                                 ))}
                             </Slider>
@@ -105,7 +115,7 @@ export default function ProjectPage() {
                                     </a>
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
             </div>

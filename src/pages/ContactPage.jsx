@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import { FaGithub, FaLinkedin, FaGlobe } from "react-icons/fa";
 import "../styles/ContactPage.css";
 import emailjs from "emailjs-com";
+import { motion } from "framer-motion";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    subject: "",    // added subject here
+    subject: "",
     message: ""
   });
 
@@ -20,7 +21,7 @@ export default function ContactPage() {
       .send(
         "service_5rzlekg",
         "template_sjlowzo",
-        formData,   // formData now includes subject
+        formData,
         "VE82rDWI2NKcKIQpY"
       )
       .then(
@@ -32,22 +33,36 @@ export default function ContactPage() {
   return (
     <section id="contact">
       <div className="contact-wrapper">
-
+        
         {/* Left Side */}
-        <div className="contact-info-panel">
+        <motion.div
+          className="contact-info-panel"
+          initial={{ opacity: 0, x: -80 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
           <h1>
             Let’s <span className="highlight">Talk</span> <br /> About Your Ideas
           </h1>
-          <p>Whether you have a question or just want to say hi, I’ll try my best to get back to you!</p>
+          <p>
+            Whether you have a question or just want to say hi, I’ll try my best to get back to you!
+          </p>
           <div className="social-links">
             <a href="https://github.com/vijayakanthang" target="_blank" rel="noopener noreferrer"><FaGithub /></a>
             <a href="https://linkedin.com/in/vijayakanthang" target="_blank" rel="noopener noreferrer"><FaLinkedin /></a>
             <a href="https://vijayakanthan-protfolio.vercel.app/" target="_blank" rel="noopener noreferrer"><FaGlobe /></a>
           </div>
-        </div>
+        </motion.div>
 
         {/* Right Side */}
-        <div className="contact-form-panel">
+        <motion.div
+          className="contact-form-panel"
+          initial={{ opacity: 0, x: 80 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
           <form onSubmit={handleSubmit}>
             <input
               type="text"
@@ -67,7 +82,7 @@ export default function ContactPage() {
             />
             <input
               type="text"
-              name="subject"        // added subject input
+              name="subject"
               placeholder="Subject"
               required
               value={formData.subject}
@@ -83,7 +98,7 @@ export default function ContactPage() {
             ></textarea>
             <button type="submit">Send Message</button>
           </form>
-        </div>
+        </motion.div>
 
       </div>
     </section>

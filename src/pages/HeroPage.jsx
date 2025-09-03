@@ -9,20 +9,22 @@ import FloatingIcons from '../components/FloatingIcons';
 function HeroPage() {
   return (
     <div id="hero-page">
-      <div className="animated-bg"></div> {/* Animated background */}
+      <div className="animated-bg"></div>
       <FloatingIcons />
 
       <motion.div
         className='hero'
         initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
+        whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, ease: "easeOut" }}
+        viewport={{ once: true, amount: 0.3 }}
       >
         <motion.p
           className='text1'
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3, duration: 0.8 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.8 }}
+          viewport={{ once: true }}
         >
           Hello I'm
         </motion.p>
@@ -30,8 +32,9 @@ function HeroPage() {
         <motion.h1
           className="title"
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.8 }}
+          viewport={{ once: true }}
         >
           VijayaKanthan G
         </motion.h1>
@@ -39,23 +42,25 @@ function HeroPage() {
         <motion.span
           className='text2'
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.9, duration: 0.8 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ delay: 0.6, duration: 0.8 }}
+          viewport={{ once: true }}
         >
-            <Typewriter
-              options={{
-                strings: ['FullStack Developer', 'Electrical and Electronics Engineer'],
-                autoStart: true,
-                loop: true,
-              }}
-            />
+          <Typewriter
+            options={{
+              strings: ['FullStack Developer', 'Electrical and Electronics Engineer'],
+              autoStart: true,
+              loop: true,
+            }}
+          />
         </motion.span>
 
         <motion.div
           className="button-container"
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.2, duration: 0.8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8, duration: 0.8 }}
+          viewport={{ once: true }}
         >
           <button
             className="btn btn-black"
@@ -70,14 +75,14 @@ function HeroPage() {
           >
             Contact Info <MdContactMail className="icon" />
           </button>
-
         </motion.div>
 
         <motion.div
           id="socials-container"
           initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 1.5, duration: 0.8 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 1, duration: 0.8 }}
+          viewport={{ once: true }}
         >
           <a href="https://linkedin.com/in/vijayakanthang/" target="_blank" rel="noreferrer">
             <FaLinkedin className="icon" />
