@@ -1,0 +1,142 @@
+:root {
+  /* Background layers */
+  --bg-base: #020408;
+  --bg-surface: #0a0d14;
+  --bg-raised: #111520;
+  --bg-card: #161b27;
+  --bg-card-hover: #1d2335;
+
+  /* Brand accent - electric cyan */
+  --accent: #00d4ff;
+  --accent-glow: #00d4ff33;
+  --accent-dim: #00d4ff18;
+  --accent-2: #7c3aed;
+  --accent-2-glow: #7c3aed33;
+
+  /* Text */
+  --text-primary: #f0f4ff;
+  --text-secondary: #8892a4;
+  --text-muted: #4a5568;
+  --text-accent: #00d4ff;
+
+  /* Borders */
+  --border: #ffffff0f;
+  --border-strong: #ffffff1a;
+  --border-accent: #00d4ff33;
+
+  /* Fonts */
+  --font-display: "Syne", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --font-body: "DM Sans", sans-serif;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --duration-fast: 0.2s;
+  --duration-base: 0.45s;
+  --duration-slow: 0.8s;
+
+  /* Layout */
+  --section-pad: clamp(80px, 10vw, 140px);
+  --shell-max: 1200px;
+  --shell-pad: clamp(20px, 5vw, 60px);
+  --radius-card: 16px;
+  --radius-pill: 100px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-base);
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.2;
+  background:
+    radial-gradient(ellipse at top left, var(--accent-dim), transparent 45%),
+    radial-gradient(ellipse at bottom right, var(--accent-2-glow), transparent 50%);
+  z-index: -2;
+}
+
+body,
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+  color: inherit;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+code,
+pre,
+.mono {
+  font-family: var(--font-mono);
+}
+
+.highlight,
+span.accent {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+::selection {
+  background: var(--accent-dim);
+  color: var(--text-primary);
+}
+
+img,
+svg,
+canvas,
+video,
+iframe {
+  display: block;
+  max-width: 100%;
+}
+
+textarea {
+  resize: vertical;
+}
