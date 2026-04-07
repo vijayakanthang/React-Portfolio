@@ -1,240 +1,96 @@
-import { lazy, Suspense, useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
-import { FaExternalLinkAlt, FaFileAlt, FaGithub, FaMicrochip } from "react-icons/fa";
-import {
-  DrawFreeCanvasPreview,
-  InventoryCanvasPreview,
-} from "../components/ProjectCanvasPreview";
-import SectionHeader from "../components/SectionHeader";
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import SpaceField from "../components/SpaceField";
 import { projects } from "../data/siteContent";
+import useTilt from "../hooks/useTilt";
 
-const ProjectsAurora3D = lazy(() => import("../components/ProjectsAurora3D"));
-
-function ProjectPreview({ project }) {
-  if (project.preview === "canvas") {
+function CardPreview({ slug }) {
+  if (slug === "draw-free") {
     return (
-      <div className="project-preview project-preview--canvas">
-        <div className="canvas-mockup">
-          <div className="canvas-mockup__toolbar">
-            <span />
-            <span />
-            <span />
-            <div className="canvas-mockup__tools">
-              <span />
-              <span />
-              <span />
-            </div>
-          </div>
-          <DrawFreeCanvasPreview />
-        </div>
-        <div className="project-preview-copy">
-          {project.highlights?.map((item) => (
-            <span key={item} className="project-preview-copy__item">
-              {item}
-            </span>
-          ))}
+      <svg viewBox="0 0 260 220" className="preview-svg preview-draw">
+        <path d="M20 160 C 60 30, 120 200, 240 40" />
+        <path d="M18 175 C 90 70, 130 180, 246 70" />
+        <path d="M26 130 C 70 35, 160 165, 238 102" />
+      </svg>
+    );
+  }
+  if (slug === "strings") {
+    return (
+      <div className="preview-phone">
+        <div className="preview-phone__head" />
+        <div className="preview-phone__messages">
+          <p>Hello there</p><p>UI feels smooth</p><p>Ship it</p>
         </div>
       </div>
     );
   }
-
-  if (project.preview === "phone") {
+  if (slug === "inventory") {
     return (
-      <div className="project-preview project-preview--phone">
-        <div className="phone-mockup">
-          <span className="phone-notch" />
-          <img src={project.image} alt={`${project.title} preview`} loading="lazy" />
-        </div>
-      </div>
+      <svg viewBox="0 0 260 220" className="preview-svg preview-bars">
+        <rect x="40" y="130" width="35" height="70" />
+        <rect x="105" y="90" width="35" height="110" />
+        <rect x="170" y="60" width="35" height="140" />
+      </svg>
     );
   }
-
-  if (project.preview === "chart") {
-    return (
-      <div className="project-preview project-preview--chart">
-        <InventoryCanvasPreview />
-      </div>
-    );
-  }
-
   return (
-    <div className="project-preview project-preview--publication">
-      <div className="publication-icon">
-        <FaMicrochip />
-      </div>
-      <div className="publication-copy">
-        <span className="publication-pill">Published</span>
-        <h4>IEEE Xplore</h4>
-        <p>{project.publication}</p>
-      </div>
-      <FaFileAlt className="publication-file" />
-    </div>
-  );
-}
-
-function ProjectLinks({ project }) {
-  if (!project.live && !project.github && !project.publicationUrl) {
-    return null;
-  }
-
-  return (
-    <div className="project-links">
-      {project.github ? (
-        <a href={project.github} target="_blank" rel="noreferrer">
-          <FaGithub />
-          GitHub
-        </a>
-      ) : null}
-      {project.live ? (
-        <a href={project.live} target="_blank" rel="noreferrer">
-          <FaExternalLinkAlt />
-          Live Demo
-        </a>
-      ) : null}
-      {project.publicationUrl ? (
-        <a href={project.publicationUrl} target="_blank" rel="noreferrer">
-          <FaFileAlt />
-          Publication
-        </a>
-      ) : null}
+    <div className="preview-stamp">
+      <span>PUBLISHED</span>
+      <p>IEEE XPLORE</p>
     </div>
   );
 }
 
 export default function ProjectsSection() {
   const sectionRef = useRef(null);
-  const [shouldRenderScene, setShouldRenderScene] = useState(false);
+  useTilt(".project-float-card", window.innerWidth < 900);
 
   useEffect(() => {
-    const section = sectionRef.current;
-    if (!section || shouldRenderScene) {
-      return undefined;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setShouldRenderScene(true);
-          observer.disconnect();
-        }
+    if (window.innerWidth < 900 || !sectionRef.current) return undefined;
+    const tween = gsap.to(".cards-track", {
+      xPercent: -75,
+      ease: "none",
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        pin: true,
+        scrub: 1,
+        end: "+=300%",
       },
-      { rootMargin: "180px 0px" },
-    );
-
-    observer.observe(section);
-    return () => observer.disconnect();
-  }, [shouldRenderScene]);
+    });
+    return () => tween.kill();
+  }, []);
 
   return (
-    <section
-      id="projects"
-      ref={sectionRef}
-      className="page-section section section--projects"
-    >
-      {shouldRenderScene ? (
-        <Suspense fallback={null}>
-          <ProjectsAurora3D />
-        </Suspense>
-      ) : null}
-      <div className="section-shell">
-        <SectionHeader
-          eyebrow="Projects"
-          title={
-            <>
-              Immersive builds that feel cinematic, tactile, and <span>high-signal</span>
-            </>
-          }
-          subtitle="A rebuilt project showcase with motion, depth, and stronger previews across creative tools, product UI, analytics, and published hardware work."
-        />
-
-        <div className="projects-bento">
+    <section id="projects" ref={sectionRef} className="page-section section projects-v3">
+      <SpaceField />
+      <div className="section-shell projects-v3__head">
+        <p className="section-eyebrow mono">PROJECTS</p>
+      </div>
+      <div className="cards-track-wrap">
+        <div className="cards-track">
           {projects.map((project, index) => (
-            <motion.article
+            <article
               key={project.slug}
-              className={`bento-card bento-card--${project.layout}`}
-              initial={{ opacity: 0, y: 28 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.25 }}
-              transition={{ duration: 0.55, delay: index * 0.08 }}
+              className="project-float-card"
+              style={{ "--z-depth": `${-index * 40}px`, "--edge": ["#ff2d78", "#00f0ff", "#aaff00", "#b44dff"][index] }}
             >
-              <CardLinkOverlay project={project} />
-
-              <div className="bento-card__header">
-                <div>
-                  <p className="bento-card__category">{project.category}</p>
-                  <h3>{project.title}</h3>
-                  <p className="bento-card__meta-line">{project.duration}</p>
-                  <ProjectLinksInline project={project} />
+              <div className="project-float-card__preview"><CardPreview slug={project.slug} /></div>
+              <div className="project-float-card__body">
+                <p className="mono">{project.category}  |  0{index + 1}</p>
+                <h3>{project.title}</h3>
+                <p>{project.description}</p>
+                <div className="project-scene__tags">
+                  {project.tech.slice(0, 4).map((item) => <span key={item} className="project-tech-pill">{item}</span>)}
                 </div>
-                <div className="bento-card__meta-chip">
-                  <span className="bento-card__order">0{index + 1}</span>
-                  <span className="bento-card__status">
-                    {project.preview === "canvas"
-                      ? "Live"
-                      : project.preview === "chart"
-                        ? "Data Viz"
-                        : project.preview === "publication"
-                          ? "Published"
-                          : "Responsive"}
-                  </span>
+                <div className="project-scene__actions">
+                  {project.github ? <a className="inline-link" href={project.github} target="_blank" rel="noreferrer">GitHub ?</a> : null}
+                  {project.live ? <a className="inline-link" href={project.live} target="_blank" rel="noreferrer">Live ?</a> : null}
                 </div>
               </div>
-
-              <p className="bento-card__description">{project.description}</p>
-
-              <ProjectPreview project={project} />
-
-              <div className="bento-card__footer">
-                <div className="project-tag-list">
-                  {project.tags.map((tag) => (
-                    <span key={tag} className="project-tag">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="project-tech-list">
-                  {project.tech.map((item) => (
-                    <span key={item} className="project-tech-pill">
-                      {item}
-                    </span>
-                  ))}
-                </div>
-
-                <ProjectLinks project={project} />
-              </div>
-            </motion.article>
+            </article>
           ))}
         </div>
       </div>
     </section>
-  );
-}
-
-function CardLinkOverlay({ project }) {
-  const primaryLink = project.live || project.github || project.publicationUrl;
-  if (!primaryLink) return null;
-
-  return (
-    <a
-      className="bento-card__link-mask"
-      href={primaryLink}
-      target="_blank"
-      rel="noreferrer"
-      aria-label={`Open ${project.title}`}
-    />
-  );
-}
-
-function ProjectLinksInline({ project }) {
-  const label = project.live ? "Open original" : project.github ? "View code" : "View paper";
-  const href = project.live || project.github || project.publicationUrl;
-
-  if (!href) return null;
-
-  return (
-    <a className="project-inline-link" href={href} target="_blank" rel="noreferrer">
-      {label} <FaExternalLinkAlt />
-    </a>
   );
 }

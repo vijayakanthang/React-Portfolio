@@ -1,73 +1,79 @@
-import { motion } from "framer-motion";
-import { FaBriefcase } from "react-icons/fa";
-import SectionHeader from "../components/SectionHeader";
+import { useEffect, useState } from "react";
 import { experiences } from "../data/siteContent";
+import PinballTracer from "../components/PinballTracer";
+
+function FlipWord({ word, active }) {
+  const chars = word.split("");
+  return (
+    <span className="flip-word">
+      {chars.map((target, i) => (
+        <span key={`${target}-${i}`} className={`flip-char ${active ? "is-active" : ""}`} style={{ "--letter-index": i }}>
+          {target}
+        </span>
+      ))}
+    </span>
+  );
+}
 
 export default function ExperiencePage() {
+  const [progress, setProgress] = useState(0);
+  const [active, setActive] = useState(false);
+  const isMobile = window.innerWidth < 900;
+
+  useEffect(() => {
+    const onScroll = () => {
+      const section = document.getElementById("experience");
+      if (!section) return;
+      const rect = section.getBoundingClientRect();
+      const p = Math.min(1, Math.max(0, (window.innerHeight - rect.top) / (window.innerHeight + rect.height)));
+      setProgress(p);
+      if (p > 0.15) setActive(true);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <section id="experience" className="page-section section section--experience">
+    <section id="experience" className="page-section section section--experience pinball-exp">
       <div className="section-shell">
-        <SectionHeader
-          eyebrow="Experience"
-          title={
-            <>
-              Scroll through the work that shaped my <span>frontend craft</span>
-            </>
-          }
-          subtitle="A timeline of product, performance, and cloud-security experience."
-        />
+        <p className="section-eyebrow mono">002 / HIGH SCORES</p>
+        <h2 className="pinball-title">EXPERIENCE</h2>
 
-        <div className="experience-timeline">
-          <motion.div
-            className="timeline-progress"
-            initial={{ scaleY: 0 }}
-            whileInView={{ scaleY: 1 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 1.1, ease: "easeOut" }}
-          />
+        <div className="pinball-lanes">
+          {experiences.map((experience, index) => {
+            const laneColor = index === 0 ? "#aaff00" : "#00f0ff";
+            const localProgress = index === 0 ? progress * 2 : (progress - 0.5) * 2;
+            return (
+              <article key={experience.company} className="pinball-lane" style={{ "--lane-color": laneColor }}>
+                <header>
+                  <h3><FlipWord word={experience.company.toUpperCase()} active={active} /></h3>
+                  <p className="mono digital-date">{experience.duration.toUpperCase()}</p>
+                  <span className={`pinball-badge ${index === 0 ? "is-current" : ""}`}>{index === 0 ? "CURRENT" : "PAST"}</span>
+                </header>
 
-          {experiences.map((experience, index) => (
-            <motion.article
-              key={experience.company}
-              className={`timeline-item ${index % 2 === 0 ? "timeline-item--left" : "timeline-item--right"}`}
-              initial={{ opacity: 0, x: index % 2 === 0 ? -40 : 40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.4 }}
-              transition={{ duration: 0.6, delay: index * 0.12 }}
-            >
-              <span className={`timeline-node timeline-node--${experience.tone}`} />
-              <div className="timeline-card">
-                <div className="timeline-card__topline">
-                  <span className={`timeline-badge timeline-badge--${experience.tone}`}>
-                    {experience.badge}
-                  </span>
-                  <span className="timeline-company-mark">
-                    <FaBriefcase />
-                    {experience.company}
-                  </span>
-                </div>
-
-                <h3>{experience.role}</h3>
-                <p className="timeline-meta">
-                  {experience.duration} | {experience.location}
-                </p>
-
-                <ul className="timeline-points">
-                  {experience.details.map((detail) => (
-                    <li key={detail}>{detail}</li>
-                  ))}
+                <ul className="pinball-points">
+                  {experience.details.map((detail, detailIndex) => {
+                    const lit = localProgress > detailIndex / experience.details.length;
+                    return (
+                      <li key={detail} className={lit ? "is-lit" : ""}>
+                        <span className="mono">{(detailIndex + 1) * 700} PTS</span>
+                        <p>{detail}</p>
+                      </li>
+                    );
+                  })}
                 </ul>
 
-                <div className="timeline-tech">
+                <div className="experience-tech">
                   {experience.tech.map((item) => (
-                    <span key={item} className="timeline-tech__pill">
-                      {item}
-                    </span>
+                    <span key={item} className="experience-tech-pill arcade-token">{item}</span>
                   ))}
                 </div>
-              </div>
-            </motion.article>
-          ))}
+              </article>
+            );
+          })}
+
+          {!isMobile ? <PinballTracer progress={progress} /> : null}
         </div>
       </div>
     </section>

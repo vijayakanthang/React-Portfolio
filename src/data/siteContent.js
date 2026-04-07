@@ -255,6 +255,12 @@ export const codingProfile = {
   summary:
     "Problem-solving profile centered on data structures, algorithms, and interview-style coding practice.",
   focus: ["DSA practice", "Java and Python", "Coding consistency"],
+  stats: {
+    totalSolved: 153,
+    easy: 85,
+    medium: 58,
+    hard: 10
+  }
 };
 
 export const contactCommands = [

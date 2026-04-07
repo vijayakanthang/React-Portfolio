@@ -1,79 +1,73 @@
-import { motion } from "framer-motion";
-import { FaArrowRight, FaCertificate } from "react-icons/fa";
-import { SiLeetcode } from "react-icons/si";
-import SectionHeader from "../components/SectionHeader";
-import { certifications, codingProfile } from "../data/siteContent";
+import { useState } from "react";
+import { achievement, certifications, codingProfile } from "../data/siteContent";
+import useTradingCard from "../hooks/useTradingCard";
+
+function CertArt({ title }) {
+  if (title.includes("React Basics")) return <div className="art-atom" />;
+  if (title.includes("Django")) return <div className="art-diamond" />;
+  if (title.includes("Android")) return <div className="art-hex" />;
+  return <div className="art-layer" />;
+}
+
+function TradingCard({ cert, legendary = false }) {
+  const [flipped, setFlipped] = useState(false);
+  return (
+    <article className={`trading-card ${legendary ? "is-legendary" : ""} ${flipped ? "is-flipped" : ""}`} onClick={() => setFlipped((s) => !s)}>
+      <div className="trading-card__inner">
+        <div className="trading-face trading-face--front">
+          <div className="trading-art">{legendary ? <div className="legendary-core" /> : <CertArt title={cert.title} />}</div>
+          <div className="trading-meta">
+            <p className="mono trading-issuer">{cert.issuer || "META"}</p>
+            <h3>{cert.title}</h3>
+            <p className="mono">{cert.platform || "COURSERA"}</p>
+            {cert.credentialId ? <p className="mono tiny">ID: {cert.credentialId}</p> : null}
+          </div>
+        </div>
+
+        <div className="trading-face trading-face--back">
+          <h4>VERIFY</h4>
+          <div className="qr-placeholder" />
+          {cert.url ? <a href={cert.url} target="_blank" rel="noreferrer">Open Verify URL</a> : null}
+          <p className="mono">Authentic Certificate</p>
+        </div>
+      </div>
+    </article>
+  );
+}
 
 export default function CertificationsPage() {
+  useTradingCard(".trading-card", window.innerWidth < 900);
+
+  const legendary = {
+    title: "PUBLISHED RESEARCH",
+    issuer: "IEEE XPLORE",
+    platform: "FIRST EDITION",
+    url: achievement.url,
+  };
+
   return (
-    <section id="certifications" className="page-section section section--certifications">
+    <section id="certifications" className="page-section section certs-v3">
       <div className="section-shell">
-        <SectionHeader
-          eyebrow="Certifications"
-          title={
-            <>
-              Credentials that reinforce the stack behind the <span>builds</span>
-            </>
-          }
-          subtitle="Short, focused certifications that support day-to-day engineering work."
-        />
+        <p className="section-eyebrow mono">CERTS + LEETCODE</p>
+        <h2 className="section-title">Holographic trading cards.</h2>
 
-        <div className="certification-grid">
-          {certifications.map((item, index) => (
-            <motion.article
-              key={item.title}
-              className="certification-card"
-              initial={{ opacity: 0, y: 22 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.4 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              <div className="certification-card__icon">
-                <FaCertificate />
-              </div>
-              <div>
-                <p className="certification-card__meta">
-                  {item.issuer} | {item.platform}
-                </p>
-                <h3>{item.title}</h3>
-                <p>{item.summary}</p>
-                <div className="certification-card__footer">
-                  <span className="credential-id">ID: {item.credentialId}</span>
-                  <a href={item.url} target="_blank" rel="noreferrer" className="inline-link">
-                    Verify certificate
-                    <FaArrowRight />
-                  </a>
-                </div>
-              </div>
-            </motion.article>
-          ))}
+        <div className="trading-grid">
+          {certifications.map((cert) => <TradingCard key={cert.title} cert={cert} />)}
+        </div>
 
-          <motion.article
-            className="coding-profile-card"
-            initial={{ opacity: 0, y: 22 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.5, delay: certifications.length * 0.08 }}
-          >
-            <div className="coding-profile-card__icon">
-              <SiLeetcode />
-            </div>
-            <div className="coding-profile-card__content">
-              <p className="certification-card__meta">{codingProfile.platform} | Coding Profile</p>
-              <h3>@{codingProfile.username}</h3>
-              <p>{codingProfile.summary}</p>
-              <div className="coding-profile-card__chips">
-                {codingProfile.focus.map((item) => (
-                  <span key={item} className="project-tech-pill">
-                    {item}
-                  </span>
-                ))}
+        <div className="trading-grid trading-grid--featured">
+          <TradingCard cert={legendary} legendary />
+          <article className="trading-card skill-card">
+            <div className="trading-face trading-face--front">
+              <h3>LEETCODE</h3>
+              <p className="mono">@{codingProfile.username}</p>
+              <div className="power-bars">
+                <span style={{ width: "78%" }} /><span style={{ width: "62%" }} /><span style={{ width: "41%" }} />
               </div>
+              <p>Focus: DSA, Java, Python</p>
+              <a href={codingProfile.url} target="_blank" rel="noreferrer">View Profile ?</a>
             </div>
-            <a href={codingProfile.url} target="_blank" rel="noreferrer" className="button button--ghost">
-              View Profile
-            </a>
-          </motion.article>
+          </article>
         </div>
       </div>
     </section>

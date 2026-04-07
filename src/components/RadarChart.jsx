@@ -1,5 +1,3 @@
-import { motion } from "framer-motion";
-
 function getPoint(value, index, total, center, radius) {
   const angle = -Math.PI / 2 + (index * Math.PI * 2) / total;
   const scaledRadius = radius * (value / 100);
@@ -53,26 +51,15 @@ export default function RadarChart({ categories }) {
           );
         })}
 
-        <motion.path
-          d={buildPath(dataPoints)}
-          className="radar-surface"
-          initial={{ pathLength: 0, opacity: 0.2 }}
-          whileInView={{ pathLength: 1, opacity: 1 }}
-          viewport={{ once: true, amount: 0.6 }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
-        />
+        <path d={buildPath(dataPoints)} className="radar-surface" />
 
         {dataPoints.map(([x, y], index) => (
-          <motion.circle
+          <circle
             key={categories[index].label}
             cx={x}
             cy={y}
             r="4.5"
             className="radar-dot"
-            initial={{ scale: 0 }}
-            whileInView={{ scale: 1 }}
-            viewport={{ once: true, amount: 0.6 }}
-            transition={{ delay: 0.15 + index * 0.08, duration: 0.25 }}
           />
         ))}
       </svg>

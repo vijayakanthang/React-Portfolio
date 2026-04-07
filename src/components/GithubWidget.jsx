@@ -52,7 +52,7 @@ export default function GithubWidget({ username }) {
             topLanguages: summarizeLanguages(repositories),
           });
         }
-      } catch (error) {
+      } catch {
         if (!cancelled) {
           setStats((previous) => ({
             ...previous,
@@ -82,20 +82,17 @@ export default function GithubWidget({ username }) {
           src={`https://ghchart.rshah.org/4ade80/${username}`}
           alt={`${username} contribution graph`}
           loading="lazy"
+          decoding="async"
         />
       </div>
 
       <div className="github-stats-grid">
         <div className="github-stat-card">
-          <span className="github-stat-card__value">
-            {stats.isLoading ? "--" : stats.repos}
-          </span>
+          <span className="github-stat-card__value">{stats.isLoading ? "--" : stats.repos}</span>
           <span className="github-stat-card__label">Public repos</span>
         </div>
         <div className="github-stat-card">
-          <span className="github-stat-card__value">
-            {stats.isLoading ? "--" : stats.stars}
-          </span>
+          <span className="github-stat-card__value">{stats.isLoading ? "--" : stats.stars}</span>
           <span className="github-stat-card__label">Total stars</span>
         </div>
       </div>
@@ -108,14 +105,12 @@ export default function GithubWidget({ username }) {
           </p>
         ) : (
           <div className="github-language-list">
-            {(stats.topLanguages.length ? stats.topLanguages : [["Loading", 0]]).map(
-              ([language, count]) => (
-                <span key={language} className="github-language-pill">
-                  {language}
-                  {count ? ` · ${count}` : ""}
-                </span>
-              ),
-            )}
+            {(stats.topLanguages.length ? stats.topLanguages : [["Loading", 0]]).map(([language, count]) => (
+              <span key={language} className="github-language-pill">
+                {language}
+                {count ? ` - ${count}` : ""}
+              </span>
+            ))}
           </div>
         )}
       </div>
