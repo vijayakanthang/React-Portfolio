@@ -1,79 +1,63 @@
 import React, { useEffect, useState } from "react";
-import "../styles/NavigationBar.css";
-import "../styles/index.css";
 
-export default function Navbar() {
-  const theme = "theme-default";
-  const [isSticky, setIsSticky] = useState(false);
-  const [currentSection, setCurrentSection] = useState("Vijayakanthan G");
+export default function NavigationBar() {
+  const [isScrolled, setIsScrolled] = useState(false);
 
-useEffect(() => {
-  document.body.className = theme;
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-  const handleScroll = () => {
-    setIsSticky(window.scrollY > 50);
-  };
-  window.addEventListener("scroll", handleScroll);
+  const navLinks = [
+    { name: "About", href: "#about" },
+    { name: "Experience", href: "#experience" },
+    { name: "Projects", href: "#projects" },
+    { name: "Skills", href: "#skills" },
+    { name: "Contact", href: "#contact" },
+  ];
 
-  const sections = document.querySelectorAll("section, #hero-page");
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          switch (entry.target.id) {
-            case "hero-page":
-              setCurrentSection("Vijayakanthan G");
-              break;
-            case "about":
-              setCurrentSection("About Me");
-              break;
-            case "projects":
-              setCurrentSection("Projects");
-              break;
-            case "contact":
-              setCurrentSection("Let’s Talk");
-              break;
-            default:
-              setCurrentSection("Vijayakanthan G");
-          }
-        }
-      });
-    },
-    {
-      threshold: 0.25, // Trigger earlier
-      rootMargin: "-50px 0px -50px 0px" // Offset for fixed navbar top & bottom
-    }
-  );
-
-  sections.forEach((sec) => observer.observe(sec));
-
-  return () => {
-    window.removeEventListener("scroll", handleScroll);
-    sections.forEach((sec) => observer.unobserve(sec));
-  };
-}, [theme]);
-
-  // Smooth scroll with navbar offset
   const handleNavClick = (e, id) => {
     e.preventDefault();
     const section = document.querySelector(id);
     if (section) {
-      const yOffset = -45; // navbar height
-      const y =
-        section.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: "smooth" });
+      section.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
   return (
-    <nav id="desktop-nav" className={isSticky ? "sticky" : ""}>
-      <div className="logo">{currentSection}</div>
-      <ul className="nav-links">
-        <li><a href="#hero-page" onClick={(e) => handleNavClick(e, "#hero-page")}>Home</a></li>
-        <li><a href="#about" onClick={(e) => handleNavClick(e, "#about")}>About</a></li>
-        <li><a href="#projects" onClick={(e) => handleNavClick(e, "#projects")}>Projects</a></li>
-        <li><a href="#contact" onClick={(e) => handleNavClick(e, "#contact")}>Contact</a></li>
-      </ul>
+    <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 ${
+      isScrolled ? 'bg-bg-deep/80 backdrop-blur-xl border-b border-white/5 py-4' : 'bg-transparent py-8'
+    }`}>
+      <div className="container-wide flex justify-between items-center">
+        <a 
+          href="/" 
+          className="text-white font-bold tracking-tighter text-xl uppercase select-none group"
+        >
+          Vijayakanthan <span className="text-neon-cyan group-hover:text-neon-pink transition-colors">G</span>
+        </a>
+
+        <div className="hidden md:flex items-center gap-2">
+          {navLinks.map((link) => (
+            <a 
+              key={link.name}
+              href={link.href} 
+              onClick={(e) => handleNavClick(e, link.href)}
+              className="px-5 py-3 rounded-lg text-xs uppercase tracking-[0.1em] text-white/50 hover:text-white hover:bg-white/5 transition-all"
+            >
+              {link.name}
+            </a>
+          ))}
+        </div>
+
+        {/* Mobile specific icon - Apple simple style */}
+        <div className="md:hidden w-6 h-6 flex flex-col justify-between items-end cursor-pointer group">
+          <div className="w-6 h-[1px] bg-white group-hover:bg-neon-cyan transition-colors"></div>
+          <div className="w-4 h-[1px] bg-white group-hover:bg-neon-cyan transition-colors"></div>
+        </div>
+      </div>
     </nav>
   );
 }
