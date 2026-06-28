@@ -168,10 +168,11 @@ export default function ProjectWindows() {
 
         {/* window stage */}
         <div className={`os-stage${dragging ? " dragging" : ""}`}>
-          {projects.map((p) => {
+          {projects.map((p, i) => {
             const w = windows[p.id] || {};
             if (!w.open) return null;
-            const l = LAYOUT[p.id];
+            // fall back to a cascade if a project has no LAYOUT entry
+            const l = LAYOUT[p.id] || { x: 30 + i * 28, y: 24 + i * 28, w: 420, h: 280 };
             const hidden = w.minimized || w.maximized;
             return (
               <Rnd
@@ -191,7 +192,9 @@ export default function ProjectWindows() {
               >
                 <div className={`win${p.flagship ? " flagship" : ""}`}>
                   <WindowChrome p={p} />
-                  <WindowBody p={p} />
+                  {/* when maximised the iframe lives in the overlay below — don't
+                      mount a second copy here (avoids duplicate live embeds) */}
+                  {!w.maximized && <WindowBody p={p} />}
                 </div>
               </Rnd>
             );

@@ -12,30 +12,22 @@ const MODEL_URL = "/models/cartoon-boy.glb";
 const TARGET_H = 1.9;       // normalised height in world units
 const MODEL_YAW = 0;        // flip to Math.PI if the model faces the wrong way
 
-// Exact animation clip names baked into cartoon-boy.glb (Blender export):
-//   "Am male cartoon|A|TPose", "Pose  7", "Pose  14", "Pose  23",
-//   "Pose  27", "Pose  29"   — note the double spaces.
-// Each is a SINGLE-keyframe static pose covering the whole skeleton, with
-// its lone keyframe sitting at a non-zero time. We resolve requested names
-// by whitespace-normalised matching so "Pose 7" / "TPose" both work.
+// Exact clip names in cartoon-boy.glb carry odd spacing ("Pose  7"), so match
+// on a whitespace-normalised name. "TPose" / "Pose 7" / "Pose 29" all resolve.
 const norm = (s) => s.replace(/\s+/g, " ").trim().toLowerCase();
 const findClip = (names, target) => {
   const t = norm(target);
-  return (
-    names.find((n) => norm(n) === t) ||
-    names.find((n) => norm(n).includes(t)) ||
-    null
-  );
+  return names.find((n) => norm(n) === t) || names.find((n) => norm(n).includes(t)) || null;
 };
 
 /**
- * Scroll-window state: a model owns a [start,end] slice of scrollProgress.
- * It fades in/out at the edges and (for the landing reveal) rotates from
- * back-facing to front-facing across the window. Non-overlapping windows
- * guarantee only one avatar is ever on screen.
+ * Scroll-window state. A model owns a [start,end] slice of scrollProgress and
+ * fades in/out at the edges; faceReveal also rotates it back→front. A window
+ * that starts at the very top (start<=0) is shown immediately — no fade-in pop
+ * on first load. Non-overlapping windows keep one avatar on screen at a time.
  */
 function windowState(p, [start, end], fade, faceReveal, baseY) {
-  const inR = smoothstep(start, start + fade, p);
+  const inR = start <= 0 ? 1 : smoothstep(start, start + fade, p);
   const outR = 1 - smoothstep(end - fade, end, p);
   const opacity = clamp01(Math.min(inR, outR));
   let rotY = baseY;
@@ -46,7 +38,7 @@ function windowState(p, [start, end], fade, faceReveal, baseY) {
   return { opacity, visible: opacity > 0.01, rotY };
 }
 
-/* ---------------- GLB figure ---------------- */
+/* ---------------- GLB figure (full mode) ---------------- */
 function AvatarModel({
   poses = ["Pose 7"],
   silhouette = false,
@@ -62,7 +54,7 @@ function AvatarModel({
   const { scene, animations } = useGLTF(MODEL_URL);
   const baseY = baseRotationY + MODEL_YAW;
 
-  // per-instance clone + materials (so opacity/silhouette are independent)
+  // per-instance clone + materials so opacity / silhouette are independent
   const { model, materials } = useMemo(() => {
     const c = SkeletonUtils.clone(scene);
     const mats = [];
@@ -77,7 +69,11 @@ function AvatarModel({
         if ("metalness" in o.material) o.material.metalness = 0;
         if ("roughness" in o.material) o.material.roughness = 1;
       }
+      // Keep depth writing ON so clothing meshes always occlude the body —
+      // otherwise the transparent pass can sort the body in front of the
+      // hoodie/pants and the character renders "without dress".
       o.material.transparent = true;
+      o.material.depthWrite = true;
       mats.push(o.material);
     });
     const box = new THREE.Box3().setFromObject(c);
@@ -92,6 +88,14 @@ function AvatarModel({
     return { model: c, materials: mats };
   }, [scene, silhouette]);
 
+  // dispose only the per-instance cloned materials on unmount (e.g. lite
+  // toggle). Geometry is shared by SkeletonUtils.clone with the cached scene
+  // and the other avatar instances, so it must NOT be disposed here.
+  useEffect(() => {
+    const mats = materials;
+    return () => mats.forEach((mat) => mat.dispose());
+  }, [materials]);
+
   const { actions, names } = useAnimations(animations, model);
   const clipNames = useMemo(
     () => poses.map((t) => findClip(names, t)).filter(Boolean),
@@ -99,22 +103,18 @@ function AvatarModel({
   );
 
   useEffect(() => {
-    if (import.meta.env.DEV && clipNames.length !== poses.length) {
-      // surface any pose name that didn't resolve against the GLB
+    if (import.meta.env.DEV) {
       const missing = poses.filter((t) => !findClip(names, t));
       if (missing.length) console.warn("[Avatar] unresolved poses", missing, "— available:", names);
     }
     if (clipNames.length === 0) return undefined;
-
     const multi = clipNames.length > 1;
     clipNames.forEach((n) => {
       const a = actions[n];
       if (!a) return;
-      // Each clip is one static keyframe → pin the action paused on that
-      // keyframe with full weight; the mixer then holds the pose every frame.
       a.reset();
       a.play();
-      a.paused = true;
+      a.paused = true;                 // single-keyframe poses → hold the frame
       a.time = a.getClip().duration;
       a.setEffectiveTimeScale(1);
       a.setEffectiveWeight(multi ? 0 : 1);
@@ -130,10 +130,7 @@ function AvatarModel({
     g.visible = visible;
     if (!visible) return;
 
-    for (let i = 0; i < materials.length; i++) {
-      materials[i].opacity = opacity;
-      materials[i].depthWrite = opacity > 0.9;
-    }
+    for (let i = 0; i < materials.length; i++) materials[i].opacity = opacity;
 
     const t = state.clock.elapsedTime;
     g.position.y = position[1] + Math.sin(t * 1.2) * 0.012;
@@ -149,7 +146,6 @@ function AvatarModel({
       g.rotation.y = baseY;
     }
 
-    // crossfade carousel across multiple poses (the silhouette blend)
     if (clipNames.length > 1) {
       const n = clipNames.length;
       const phase = ((t * 0.25) % n + n) % n;
@@ -169,71 +165,46 @@ function AvatarModel({
   );
 }
 
-/* ---------------- primitive fallback ---------------- */
-function AvatarPrimitive({
-  silhouette = false,
-  visWindow = [0, 1],
-  fade = 0.04,
-  faceReveal = false,
-  track = true,
-  baseRotationY = 0,
-  scale = 1,
-  position = [0, 0, 0],
-}) {
+/* ---------------- green glowing dot (lite / mobile) ---------------- */
+function AvatarDot({ visWindow = [0, 1], fade = 0.04, position = [0, 0, 0] }) {
   const group = useRef();
-  const head = useRef();
-  const baseY = baseRotationY + MODEL_YAW;
-  const color = silhouette ? "#03150c" : PALETTE.green;
-
-  const skin = () => (
-    <meshStandardMaterial
-      color={color} emissive={silhouette ? "#000000" : color}
-      emissiveIntensity={silhouette ? 0 : 0.9}
-      transparent opacity={0.9} roughness={silhouette ? 1 : 0.4}
-      metalness={silhouette ? 0 : 0.2} toneMapped={false}
-    />
-  );
+  const halo = useRef();
+  const coreMat = useRef();
+  const haloMat = useRef();
 
   useFrame((state) => {
     const g = group.current;
     if (!g) return;
     const p = useStore.getState().scrollProgress;
-    const { opacity, visible, rotY } = windowState(p, visWindow, fade, faceReveal, baseY);
+    const { opacity, visible } = windowState(p, visWindow, fade, false, 0);
     g.visible = visible;
     if (!visible) return;
-    g.scale.setScalar(scale * (0.6 + 0.4 * opacity));
     const t = state.clock.elapsedTime;
-    g.position.y = position[1] + Math.sin(t * 1.3) * 0.02;
-    if (faceReveal) {
-      g.rotation.y = rotY;
-    } else {
-      g.rotation.y = baseY;
-      if (head.current && track) {
-        const tx = THREE.MathUtils.clamp(state.pointer.x, -1, 1) * 0.5;
-        const ty = THREE.MathUtils.clamp(state.pointer.y, -1, 1) * 0.3;
-        head.current.rotation.y += (tx - head.current.rotation.y) * 0.08;
-        head.current.rotation.x += (-ty - head.current.rotation.x) * 0.08;
-      }
-    }
+    g.position.set(position[0], position[1] + 1.0 + Math.sin(t * 1.6) * 0.06, position[2]);
+    if (halo.current) halo.current.scale.setScalar(1 + Math.sin(t * 3) * 0.18);
+    if (coreMat.current) coreMat.current.opacity = opacity;
+    if (haloMat.current) haloMat.current.opacity = 0.35 * opacity;
   });
 
   return (
-    <group ref={group} position={position} rotation={[0, baseY, 0]} scale={scale}>
-      <group ref={head} position={[0, 1.62, 0]}>
-        <mesh><sphereGeometry args={[0.17, 24, 24]} />{skin()}</mesh>
-        {!silhouette && (
-          <mesh position={[0, 0.01, 0.14]}>
-            <boxGeometry args={[0.22, 0.05, 0.06]} />
-            <meshStandardMaterial color={PALETTE.hot} emissive={PALETTE.hot} emissiveIntensity={2.4} toneMapped={false} />
-          </mesh>
-        )}
-      </group>
-      <mesh position={[0, 1.42, 0]}><cylinderGeometry args={[0.06, 0.07, 0.12, 12]} />{skin()}</mesh>
-      <mesh position={[0, 1.05, 0]}><capsuleGeometry args={[0.22, 0.45, 8, 18]} />{skin()}</mesh>
-      <mesh position={[-0.3, 1.02, 0]} rotation={[0, 0, 0.18]}><capsuleGeometry args={[0.06, 0.5, 6, 12]} />{skin()}</mesh>
-      <mesh position={[0.3, 1.02, 0]} rotation={[0, 0, -0.18]}><capsuleGeometry args={[0.06, 0.5, 6, 12]} />{skin()}</mesh>
-      <mesh position={[-0.11, 0.4, 0]}><capsuleGeometry args={[0.08, 0.6, 6, 12]} />{skin()}</mesh>
-      <mesh position={[0.11, 0.4, 0]}><capsuleGeometry args={[0.08, 0.6, 6, 12]} />{skin()}</mesh>
+    <group ref={group} position={position}>
+      <mesh>
+        <sphereGeometry args={[0.12, 24, 24]} />
+        <meshBasicMaterial ref={coreMat} color={PALETTE.hot} transparent toneMapped={false} />
+      </mesh>
+      <mesh ref={halo}>
+        <sphereGeometry args={[0.26, 24, 24]} />
+        <meshBasicMaterial
+          ref={haloMat}
+          color={PALETTE.green}
+          transparent
+          opacity={0.35}
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+          toneMapped={false}
+        />
+      </mesh>
+      <pointLight color={PALETTE.green} intensity={6} distance={5} />
     </group>
   );
 }
@@ -242,9 +213,12 @@ function AvatarPrimitive({
 export default function Avatar(props) {
   const lite = useStore((s) => s.liteMode);
   const isMobile = useIsMobile();
-  if (lite || isMobile) return <AvatarPrimitive {...props} />;
+  // Lite / mobile: never fetch the GLB — show a small green glowing dot.
+  if (lite || isMobile) return <AvatarDot {...props} />;
+  // Full mode: model is preloaded behind the boot loader, so no visible
+  // fallback is needed (null avoids a partial / undressed flash).
   return (
-    <Suspense fallback={<AvatarPrimitive {...props} />}>
+    <Suspense fallback={null}>
       <AvatarModel {...props} />
     </Suspense>
   );
