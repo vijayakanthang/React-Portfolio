@@ -1141,3 +1141,82 @@ textarea.note-input { resize: vertical; }
 @media (max-width: 720px) {
   .contact-grid { grid-template-columns: 1fr; }
 }
+
+/* ============================================================
+   RESPONSIVE LAYOUTS
+   Breakpoints: ≤1024 tablet · ≤900 small-tablet · ≤768 phone (lite
+   3D) · ≤560 phone · ≤380 tiny · short-landscape. Below 768 the
+   canvas runs in lite mode (simplified 3D + green-dot avatar).
+   ============================================================ */
+
+/* ---------- ≤1024 : tablets ---------- */
+@media (max-width: 1024px) {
+  .scene-section { padding: 5rem 1.25rem; }
+}
+
+/* ---------- ≤900 : projects sidebar collapses to icons ---------- */
+@media (max-width: 900px) {
+  .os-sidebar { width: 58px; padding: 0.55rem 0.35rem; }
+  .os-side-h, .side-meta, .side-open, .side-all { display: none; }
+  .os-sidebar ul { align-items: center; }
+  .side-item { justify-content: center; padding: 0.5rem; }
+  .os-head p { display: none; }
+}
+
+/* ---------- ≤768 : phones & small tablets ---------- */
+@media (max-width: 768px) {
+  .scene-section { padding: 4.75rem 1rem; }
+
+  /* nav: numbers only, but reveal the ACTIVE section's label */
+  .scene-nav { max-width: calc(100vw - 0.6rem); }
+  .scene-nav ul { gap: 0.12rem; padding: 0.3rem 0.4rem; overflow-x: auto; }
+  .scene-nav-item { padding: 0.4rem 0.55rem; }
+  .scene-nav-item .lbl { display: none; }
+  .scene-nav-item.is-active .lbl { display: inline; }
+
+  /* phones are always lite — the full/lite toggle would overlap the HUD */
+  .lite-toggle { display: none; }
+
+  /* SKILLS HUD → stacked, thumb-friendly: title up top, the skill rail as a
+     horizontal swipe strip, the detail panel full-width along the bottom */
+  .hud-tr, .hud-bl, .hud-hint, .hud-hotbar { display: none; }
+  .hud-tl {
+    top: 4.4rem; left: 50%; transform: translateX(-50%);
+    background: none; border: none; padding: 0;
+  }
+  .hud-rail {
+    top: 6.6rem; bottom: auto; left: 0; right: 0; transform: none;
+    flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto;
+    max-width: 100%; padding: 0 0.9rem 0.4rem; gap: 0.4rem;
+    -webkit-overflow-scrolling: touch;
+  }
+  .rail-node { flex: 0 0 auto; width: 74px; }
+  .hud-br { left: 0.9rem; right: 0.9rem; bottom: 0.9rem; width: auto; }
+}
+
+/* ---------- ≤560 : phones ---------- */
+@media (max-width: 560px) {
+  .hero-title { letter-spacing: 0.08em; }
+  .kicker { letter-spacing: 0.3em; font-size: 0.68rem; text-indent: 0.3em; }
+  .hero-sub { letter-spacing: 0.26em; font-size: 0.68rem; text-indent: 0.26em; }
+
+  .about-hud { padding: 4.4rem 0.9rem 2rem; }
+  .about-h { font-size: 2.1rem; }
+  .panel { padding: 1.3rem 1.1rem; }
+  .scene-heading { font-size: 1.5rem; }
+}
+
+/* ---------- ≤380 : tiny phones ---------- */
+@media (max-width: 380px) {
+  .hero-title { font-size: 2.3rem; }
+  .rail-node { width: 66px; }
+}
+
+/* ---------- phones held sideways — reclaim vertical space ---------- */
+@media (max-height: 500px) and (orientation: landscape) {
+  .scene-section { padding: 3.5rem 1rem; }
+  .hud-tl { display: none; }
+  .hud-rail { top: 4rem; }
+  .hud-br { bottom: 0.5rem; padding: 0.55rem 0.8rem; }
+  .detail-desc { display: none; }
+}
