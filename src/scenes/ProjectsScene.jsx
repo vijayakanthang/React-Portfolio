@@ -29,7 +29,9 @@ function WallScreen({ position, size, seed }) {
 function RoboArm({ position, dir = 1 }) {
   const ref = useRef();
   useFrame((state) => {
-    if (ref.current) ref.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.3) * 0.25 * dir;
+    const g = ref.current;
+    if (!g || (g.parent && !g.parent.visible)) return; // skip when scene is off-band
+    g.rotation.z = Math.sin(state.clock.elapsedTime * 0.3) * 0.25 * dir;
   });
   const dark = <meshStandardMaterial color="#06150c" roughness={0.7} metalness={0.4} />;
   return (

@@ -3,7 +3,7 @@ import { useProgress } from "@react-three/drei";
 import { useStore } from "../lib/store";
 import { useIsMobile } from "../hooks/useMediaQuery";
 
-const GLYPHS = "アイウエオカキクケコ01<>=*+ﾊﾋﾌﾍﾎ";
+const GLYPHS = "அஆஇஈஉஊஎஏஐஒகஙசஞடணதநபமயரலவழளறன01<>=*+";
 const scramble = (n) =>
   Array.from({ length: n }, () => GLYPHS[(Math.random() * GLYPHS.length) | 0]).join("");
 

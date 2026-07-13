@@ -7,72 +7,52 @@ export const identity = {
   name: "VijayaKanthan G",
   firstName: "VIJAYAKANTHAN ",
   lastName: "G",
+  initials: "VG",
   title: "Frontend / Full-Stack Engineer",
   subtitle: "Next.js · React · TypeScript — technical-SEO focus",
   flavorTitles: ["Electrical Engineer", "Full Stack Developer", "Tech Enthusiast"],
-  location: "Coimbatore, India",
+  location: "Chennai, India",
 };
 
-// About / career objective copy
-export const about = {
-  greeting: "Hi, I'm",
-  intro:
-    "A Full Stack Developer who loves building digital solutions that create real world impact.",
-  objective:
-    "Frontend / full-stack engineer (Next.js, React, TypeScript) with a technical-SEO focus. I currently build the marketing platform at Klamp.ai — performance-tuned, search-optimized, shipped to production. I like turning hardware-grounded problem-solving into fast, accessible web products.",
-  pillars: ["INNOVATE", "BUILD", "LEARN", "REPEAT"],
-};
-
-// Career objective shown on the About HUD's objective card.
-export const careerObjective =
-  "To leverage my skills in full stack development, cloud technologies and problem solving to build innovative, scalable and user centric solutions while continuously learning and growing in a challenging environment.";
-
-// Floating role badges around the avatar.
-export const roles = [
-  { id: "fullstack", label: "Full Stack Developer", sub: "DEVELOPER", icon: "code" },
-  { id: "cloud", label: "Cloud Enthusiast", sub: "ENTHUSIAST", icon: "cloud" },
-  { id: "problem", label: "Problem Solver", sub: "SOLVER", icon: "puzzle" },
-  { id: "tech", label: "Tech Explorer", sub: "EXPLORER", icon: "rocket" },
-  { id: "learner", label: "Lifelong Learner", sub: "LEARNER", icon: "book" },
+// Career / education log — newest first. `period` and `detail` are optional.
+// Canonical career data; currently surfaced via the About career trace and
+// kept here for the parked "// LOG" timeline + SEO.
+export const experienceLog = [
+  {
+    id: "arbaan",
+    org: "Arbaan GT",
+    role: "Frontend / Full-Stack Engineer · Klamp.ai",
+    period: "Dec 2025 — present",
+    detail: "Next.js 14 · React 18 · TypeScript · Strapi · GCP · Vercel",
+  },
+  {
+    id: "accenture",
+    org: "Accenture",
+    role: "Azure Security Intern",
+    period: "Feb 2025 — Jun 2025",
+    detail: "AZ-500 · Privileged Identity Management · least-privilege access",
+  },
+  {
+    id: "kit",
+    org: "Karpagam Institute of Technology",
+    role: "B.E. Electrical & Electronics Engineering",
+    period: "2021 — 2025",
+    detail: "CGPA 7.62 / 10 · Coimbatore",
+  },
+  {
+    id: "ieee",
+    org: "IEEE Xplore",
+    role: "Publication — Smart Sanitizing Toilet",
+    detail: "Touchless, UV-disinfected, self-cleaning hygiene system",
+  },
 ];
 
-// "My Journey" vertical timeline.
-export const journey = [
-  { year: "2024", text: "Building scalable full stack applications and cloud solutions" },
-  { year: "2023", text: "Explored cloud technologies and devops" },
-  { year: "2022", text: "Started full stack development journey" },
-  { year: "2021", text: "Began programming with curiosity and passion" },
+export const certifications = [
+  "React Basics — Meta",
+  "Django Web Framework — Coursera",
+  "MongoDB for Students — MongoDB",
+  "Developing Soft Skills — NPTEL",
 ];
-
-// Stats grid.
-export const stats = [
-  { id: "projects", value: "5+", label: "Projects Completed", icon: "code" },
-  { id: "years", value: "1+", label: "Years of Experience", icon: "trophy" },
-  { id: "hours", value: "1000+", label: "Hours of Coding", icon: "coffee" },
-  { id: "passion", value: "∞", label: "Passion for Learning", icon: "infinity" },
-];
-
-// Education (pulled from the About reference — edit to taste).
-export const education = {
-  degree: "Bachelor of Engineering",
-  field: "Electrical and Electronics Engineering",
-  school: "Karpagam Institute of Technology",
-  period: "2021 - 2025",
-  cgpa: "CGPA: 7.62 / 10",
-};
-
-// Interests chips.
-export const interests = [
-  { id: "aiml", label: "AI & ML", icon: "brain" },
-  { id: "cyber", label: "Cyber Security", icon: "lock" },
-  { id: "iot", label: "IoT", icon: "wifi" },
-  { id: "sysdesign", label: "System Design", icon: "grid" },
-  { id: "gaming", label: "Gaming", icon: "gamepad" },
-];
-
-// Personal quote banner.
-export const quote =
-  "Code is not just what I write, it's how I solve problems, build ideas and impact the world.";
 
 export const links = {
   github: "https://github.com/Vijayakanthang",
@@ -82,87 +62,91 @@ export const links = {
   phone: "9952103324", // add when available
 };
 
-// Skills as "monuments" — game levels are stylised flavour, not literal claims.
-export const skills = [
+// Skills — grouped tech stack. No levels/percentages; just what's used.
+// `icon` maps to an icon in SkillsHUD's ICON registry.
+export const skillGroups = [
   {
-    id: "javascript",
-    name: "JavaScript",
-    level: 95,
-    exp: 9500,
-    color: "#f7df1e",
-    blurb:
-      "The language the whole world runs on. From DOM to async to the deep weird parts — fluent.",
-    abilities: ["Async/Await", "Closures", "ES2024", "Perf Profiling", "Patterns"],
+    id: "frontend",
+    title: "Frontend",
+    icon: "code",
+    skills: ["React.js", "Next.js", "TypeScript", "HTML5", "CSS3", "Tailwind CSS"],
   },
   {
-    id: "typescript",
-    name: "TypeScript",
-    level: 88,
-    exp: 8800,
-    color: "#3178c6",
-    blurb:
-      "Types as a design tool. Generics, inference and strict mode keep large apps honest.",
-    abilities: ["Generics", "Inference", "Strict Mode", "Type Guards", "DX"],
+    id: "backend",
+    title: "Backend",
+    icon: "server",
+    skills: ["Node.js", "Express.js", "REST APIs", "Django", "Socket.io"],
   },
   {
-    id: "react",
-    name: "React",
-    level: 95,
-    exp: 9500,
-    color: "#61dafb",
-    blurb:
-      "A powerful library for building user interfaces. Component-based architecture with blazing performance.",
-    abilities: ["Hooks", "Suspense", "Server Comp.", "Memoization", "R3F"],
+    id: "databases",
+    title: "Databases",
+    icon: "database",
+    skills: ["MongoDB", "MySQL"],
   },
   {
-    id: "nextjs",
-    name: "Next.js",
-    level: 92,
-    exp: 9200,
-    color: "#ffffff",
-    blurb:
-      "App Router, SSR/ISR and technical SEO at scale — the daily driver for production work.",
-    abilities: ["App Router", "SSR/ISR", "Edge", "Metadata", "Core Web Vitals"],
+    id: "tools",
+    title: "Tools & Platforms",
+    icon: "cloud",
+    skills: ["Git", "GitHub", "Docker", "Vercel", "Netlify", "Strapi CMS"],
   },
   {
-    id: "node",
-    name: "Node / Express",
-    level: 90,
-    exp: 9000,
-    color: "#3c873a",
-    blurb:
-      "Servers, APIs and tooling. Express routes, middleware and hardened form endpoints.",
-    abilities: ["REST", "Middleware", "Auth", "Streams", "Hardening"],
+    id: "languages",
+    title: "Languages",
+    icon: "terminal",
+    skills: ["JavaScript", "TypeScript", "Python", "Java"],
   },
   {
-    id: "mongodb",
-    name: "MongoDB",
-    level: 85,
-    exp: 8500,
-    color: "#13aa52",
-    blurb:
-      "Document modelling with Mongoose. Schemas, aggregation and indexes that scale.",
-    abilities: ["Mongoose", "Aggregation", "Indexing", "Schema Design", "Atlas"],
-  },
-  {
-    id: "python",
-    name: "Python",
-    level: 90,
-    exp: 9000,
-    color: "#ffd343",
-    blurb:
-      "Scripting, automation and data glue. The Swiss-army knife behind the scenes.",
-    abilities: ["Automation", "Scripting", "Data", "APIs", "Tooling"],
+    id: "engineering",
+    title: "Engineering",
+    icon: "cpu",
+    skills: ["Data Structures", "Algorithms", "OOP", "API Design", "Performance", "Problem Solving"],
   },
 ];
 
-// "Current Passives" — RPG-style trait chips.
-export const passives = [
-  { id: "problem-solver", name: "Problem Solver", stat: "+15 INT" },
-  { id: "quick-learner", name: "Quick Learner", stat: "+20 EXP" },
-  { id: "perf-hawk", name: "Performance Hawk", stat: "+15 STR" },
-  { id: "systems-thinker", name: "Systems Thinker", stat: "+15 WIS" },
+// Measurable engineering signal shown under the skills grid (no fake scores).
+export const engineeringSignal = {
+  metric: "300+ LeetCode problems solved",
+  note: "Strong in DSA & Problem Solving",
+};
+
+// ---- About section ----------------------------------------------------
+
+// One-line intro under the ABOUT heading.
+export const aboutIntro =
+  "Full-Stack Developer building fast, scalable and user-focused digital products.";
+
+// Minimal identity rows (left column). `icon` maps to SkillsHUD's ICON registry.
+export const identityRows = [
+  { id: "exp", icon: "calendar", label: "Experience", value: "1+ Years", sub: "Professional + Internship" },
+  { id: "loc", icon: "pin", label: "Location", value: "Chennai, India" },
+  { id: "focus", icon: "target", label: "Focus", value: "Frontend / Full-Stack Engineering" },
+  { id: "status", icon: "signal", label: "Status", value: "Open to Opportunities" },
 ];
+
+// "MY JOURNEY" panel copy.
+export const journey = [
+  "I'm a Full-Stack Developer focused on building fast, scalable and user-friendly web applications.",
+  "My professional work spans React, Next.js, TypeScript, SEO, Core Web Vitals, Strapi CMS and API development. I enjoy turning complex requirements into simple, reliable digital experiences.",
+  "Beyond production work, I continuously strengthen my problem-solving skills through Data Structures and Algorithms and have solved 300+ LeetCode problems.",
+];
+
+// Proof-of-work blocks — demonstrated areas, not vanity metrics.
+export const proofOfWork = [
+  { id: "prod", icon: "code", word: "PRODUCTION", label: "Next.js / React" },
+  { id: "dsa", icon: "cpu", word: "DSA", label: "300+ Problems" },
+  { id: "backend", icon: "server", word: "BACKEND", label: "APIs & Automation" },
+  { id: "cloud", icon: "cloud", word: "CLOUD", label: "Azure Security" },
+];
+
+// Minimal horizontal career trace (oldest → newest).
+export const careerTrace = [
+  { id: "accenture", year: "2025", org: "Accenture", role: "Azure Security" },
+  { id: "klamp", year: "2025 — Present", org: "Klamp.ai", role: "Frontend / Full-Stack" },
+];
+
+// Closing quote strip that leads About into Skills.
+export const aboutQuote =
+  "Code is not just what I write — it's how I solve problems and turn ideas into useful products.";
 
 // Projects — Klamp.ai is the flagship; others supply range.
 // embeddable: whether a live <iframe> is allowed (controlled headers) — else use thumbnail.

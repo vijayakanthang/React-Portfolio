@@ -18,9 +18,8 @@ export default function Sections() {
         <LandingCopy />
       </section>
 
-      {/* 02 · ABOUT — full HUD dashboard */}
+      {/* 02 · ABOUT — operator dossier + career log */}
       <section id="about" className="scene-section section-about" aria-label="About me">
-        <h2 className="sr-only">About — {identity.name}, {identity.title}</h2>
         <AboutHUD />
       </section>
 

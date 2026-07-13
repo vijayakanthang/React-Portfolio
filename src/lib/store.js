@@ -3,21 +3,18 @@
 //  and the DOM/HUD layers. Kept deliberately small.
 // ============================================================
 import { create } from "zustand";
-import { sectionFromProgress } from "./sections";
 
 export const useStore = create((set, get) => ({
   // ---- scroll ----
   scrollProgress: 0, // 0→1 across the whole page
+  // Which section owns the viewport — driven by the real DOM section
+  // positions (useActiveSection in App), so it stays correct however tall
+  // sections grow on any breakpoint. The 3D world keeps using progress BANDS.
   activeSection: "landing",
-  setScrollProgress: (p) => {
-    const next = sectionFromProgress(p);
-    const prev = get().activeSection;
-    set(
-      prev === next
-        ? { scrollProgress: p }
-        : { scrollProgress: p, activeSection: next }
-    );
+  setActiveSection: (id) => {
+    if (get().activeSection !== id) set({ activeSection: id });
   },
+  setScrollProgress: (p) => set({ scrollProgress: p }),
 
   // ---- performance / accessibility ----
   liteMode: false,
@@ -28,8 +25,10 @@ export const useStore = create((set, get) => ({
   setReady: (v) => set({ ready: v }),
 
   // ---- skills HUD: which monument is selected ----
-  selectedSkill: "react",
-  setSelectedSkill: (id) => set({ selectedSkill: id }),
+  // ---- skills: which group index (0..2 → nearest cube) is hovered, or null.
+  // Drives the 3D Stack Core's subtle hover response.
+  hoveredSkillCube: null,
+  setHoveredSkillCube: (i) => set({ hoveredSkillCube: i }),
 
   // ---- projects: desktop window manager ----
   // windows: id -> { open, minimized, maximized, z, x, y, w, h }

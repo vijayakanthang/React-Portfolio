@@ -22,6 +22,12 @@ export default function SceneNav() {
             </button>
           </li>
         ))}
+        <li>
+          {/* recruiter fast path — straight to the PDF, no journey required */}
+          <a className="scene-nav-item nav-resume" href="/resume.pdf" target="_blank" rel="noreferrer">
+            <span className="lbl-always">RESUME</span>
+          </a>
+        </li>
       </ul>
     </nav>
   );

@@ -35,10 +35,12 @@ export default function InfinityLoop({ a = 1.7 }) {
   useEffect(() => () => { core.dispose(); halo.dispose(); }, [core, halo]);
 
   useFrame((state) => {
+    const g = groupRef.current;
+    if (!g || (g.parent && !g.parent.visible)) return; // fade completes before the landing group hides
     const progress = useStore.getState().scrollProgress;
 
     // morph 0→1 across the opening scroll
-    const m = smoothstep(0.03, 0.16, progress);
+    const m = smoothstep(0.02, 0.09, progress);
     const s = Math.round(m * STEPS);
     if (s !== stepRef.current) {
       stepRef.current = s;
@@ -46,7 +48,7 @@ export default function InfinityLoop({ a = 1.7 }) {
     }
 
     // fade the loop out as the world opens
-    const vis = 1 - smoothstep(0.13, 0.2, progress);
+    const vis = 1 - smoothstep(0.09, 0.14, progress);
     if (coreMat.current) coreMat.current.opacity = vis;
     if (haloMat.current) haloMat.current.opacity = 0.5 * vis;
 

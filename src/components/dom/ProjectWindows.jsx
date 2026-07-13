@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Rnd } from "react-rnd";
 import {
   FiGithub, FiExternalLink, FiX, FiMinus, FiSquare,
@@ -102,6 +102,32 @@ export default function ProjectWindows() {
   const isMobile = useIsMobile();
   const [dragging, setDragging] = useState(false); // disables iframe pointer events mid-drag
 
+  // measure the stage so initial window rects never spawn clipped —
+  // bounds="parent" only constrains dragging, not first placement
+  const stageRef = useRef(null);
+  const [stage, setStage] = useState(null);
+  useEffect(() => {
+    const el = stageRef.current;
+    if (!el) return undefined;
+    const measure = () => setStage({ w: el.clientWidth, h: el.clientHeight });
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [isMobile]);
+
+  const clampRect = (l) => {
+    if (!stage) return l;
+    const w = Math.min(l.w, Math.max(280, stage.w - 16));
+    const h = Math.min(l.h, Math.max(190, stage.h - 16));
+    return {
+      w,
+      h,
+      x: Math.max(8, Math.min(l.x, stage.w - w - 8)),
+      y: Math.max(8, Math.min(l.y, stage.h - h - 8)),
+    };
+  };
+
   // open every window once on mount
   useEffect(() => {
     projects.forEach((p) => openWindow(p.id, LAYOUT[p.id]));
@@ -167,12 +193,16 @@ export default function ProjectWindows() {
         </aside>
 
         {/* window stage */}
-        <div className={`os-stage${dragging ? " dragging" : ""}`}>
-          {projects.map((p, i) => {
+        <div ref={stageRef} className={`os-stage${dragging ? " dragging" : ""}`}>
+          {/* windows mount only after the stage is measured so first placement
+              is already clamped inside it */}
+          {stage && projects.map((p, i) => {
             const w = windows[p.id] || {};
             if (!w.open) return null;
             // fall back to a cascade if a project has no LAYOUT entry
-            const l = LAYOUT[p.id] || { x: 30 + i * 28, y: 24 + i * 28, w: 420, h: 280 };
+            const l = clampRect(
+              LAYOUT[p.id] || { x: 30 + i * 28, y: 24 + i * 28, w: 420, h: 280 }
+            );
             const hidden = w.minimized || w.maximized;
             return (
               <Rnd

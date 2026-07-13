@@ -4,7 +4,6 @@ import * as THREE from "three";
 import LandingScene from "../scenes/LandingScene";
 import AboutScene from "../scenes/AboutScene";
 import SkillsScene from "../scenes/SkillsScene";
-import ProjectsScene from "../scenes/ProjectsScene";
 import Effects from "../three/Effects";
 import { useStore } from "../lib/store";
 import { clamp01 } from "../lib/sections";
@@ -16,15 +15,18 @@ import { PALETTE } from "../lib/palette";
 // between adjacent frames so the journey blends instead of cutting.
 const KEYFRAMES = [
   { p: 0.0, pos: [0, 0, 6], look: [0, 0, 0] },
-  { p: 0.16, pos: [0, 0.9, 4.4], look: [0, -0.3, -1.6] },
-  { p: 0.29, pos: [0, 0.5, 4.8], look: [0, 0.15, 0] }, // about (centred for the HUD)
-  { p: 0.51, pos: [0, 1.2, 9], look: [0, 0.5, -3] }, // skills
-  { p: 0.73, pos: [0, 0.6, 7], look: [0, 0.5, -2.5] }, // projects
-  { p: 0.92, pos: [0, 0.4, 5], look: [0, -0.3, 0] }, // contact
+  { p: 0.1, pos: [0, 0.9, 4.4], look: [0, -0.3, -1.6] }, // leaving landing
+  { p: 0.17, pos: [0.55, 0.45, 4.6], look: [0.55, 0.2, 0] }, // about — avatar sits centre-left behind the story zone
+  { p: 0.33, pos: [0.55, 0.45, 4.6], look: [0.55, 0.2, 0] }, // hold through the profile
+  { p: 0.45, pos: [-1.0, 0.4, 5.2], look: [-1.0, 0.2, 0] }, // skills — StackCore framed screen-left
+  { p: 0.6, pos: [-1.0, 0.4, 5.2], look: [-1.0, 0.2, 0] },
+  { p: 0.75, pos: [0, 0.6, 7], look: [0, 0.5, -2.5] }, // projects/contact are DOM-only
   { p: 1.0, pos: [0, 0.4, 5], look: [0, -0.3, 0] },
-];
-
-const v = (a) => new THREE.Vector3(a[0], a[1], a[2]);
+].map((k) => ({
+  p: k.p,
+  pos: new THREE.Vector3(...k.pos),
+  look: new THREE.Vector3(...k.look),
+}));
 
 function cameraTarget(p, pos, look) {
   let i = 0;
@@ -32,8 +34,8 @@ function cameraTarget(p, pos, look) {
   const a = KEYFRAMES[i];
   const b = KEYFRAMES[Math.min(i + 1, KEYFRAMES.length - 1)];
   const t = clamp01((p - a.p) / (b.p - a.p || 1e-6));
-  pos.copy(v(a.pos)).lerp(v(b.pos), t);
-  look.copy(v(a.look)).lerp(v(b.look), t);
+  pos.copy(a.pos).lerp(b.pos, t);
+  look.copy(a.look).lerp(b.look, t);
 }
 
 function CameraRig({ reduced }) {
@@ -82,7 +84,7 @@ export default function Experience() {
           <LandingScene />
           <AboutScene />
           <SkillsScene />
-          <ProjectsScene />
+          {/* Projects/Contact are DOM-only — no 3D props behind them */}
         </Suspense>
         <CameraRig reduced={reduced} />
         {!lite && <Effects intensity={1.0} />}

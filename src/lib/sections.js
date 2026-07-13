@@ -6,13 +6,14 @@
 
 export const SECTION_IDS = ["landing", "about", "skills", "projects", "contact"];
 
-// Progress bands [start, end] for each scene. Tune freely.
+// Progress bands [start, end] for each scene — tuned to which section
+// occupies the viewport center (five equal 100vh sections on desktop).
 export const BANDS = {
-  landing: [0.0, 0.18],
-  about: [0.18, 0.4],
-  skills: [0.4, 0.62],
-  projects: [0.62, 0.84],
-  contact: [0.84, 1.0],
+  landing: [0.0, 0.125],
+  about: [0.125, 0.375],
+  skills: [0.375, 0.625],
+  projects: [0.625, 0.875],
+  contact: [0.875, 1.0],
 };
 
 export const clamp01 = (v) => Math.min(1, Math.max(0, v));
@@ -28,15 +29,6 @@ export const smoothstep = (edge0, edge1, x) => {
 export const bandProgress = (id, progress) => {
   const [start, end] = BANDS[id];
   return clamp01((progress - start) / (end - start || 1e-6));
-};
-
-// Which section is "active" for a given global progress.
-export const sectionFromProgress = (progress) => {
-  for (const id of SECTION_IDS) {
-    const [, end] = BANDS[id];
-    if (progress < end) return id;
-  }
-  return "contact";
 };
 
 // Is the scroll position within (or just outside) a band — used to mount /

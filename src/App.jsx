@@ -7,16 +7,18 @@ import Sections from "./components/dom/Sections";
 import Loader from "./components/Loader";
 import LiteToggle from "./components/dom/LiteToggle";
 import ScrollBar from "./components/dom/ScrollBar";
-import { useSmoothScroll } from "./hooks/useLenis";
-import { usePrefersReducedMotion } from "./hooks/useMediaQuery";
+import { useActiveSection, useSmoothScroll } from "./hooks/useLenis";
+import { useIsMobile, usePrefersReducedMotion } from "./hooks/useMediaQuery";
 import { useStore } from "./lib/store";
 
 export default function App() {
   const reduced = usePrefersReducedMotion();
+  const isMobile = useIsMobile();
   const setReady = useStore((s) => s.setReady);
   const [booted, setBooted] = useState(false);
 
   useSmoothScroll(!reduced);
+  useActiveSection();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -28,7 +30,8 @@ export default function App() {
       <a href="#about" className="skip-link">Skip to content</a>
 
       <MatrixRain />
-      <Experience />
+      {/* mobile is 2D-first: the rain + DOM sections carry the whole experience */}
+      {!isMobile && <Experience />}
 
       <ScrollBar />
       <SceneNav />

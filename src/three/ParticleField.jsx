@@ -32,9 +32,10 @@ export default function ParticleField({
   }, [count, spread, colorA, colorB]);
 
   useFrame((state, delta) => {
-    if (!ref.current) return;
-    ref.current.rotation.y += delta * speed;
-    ref.current.position.y = Math.sin(state.clock.elapsedTime * 0.2) * 0.5;
+    const g = ref.current;
+    if (!g || (g.parent && !g.parent.visible)) return; // skip when scene is off-band
+    g.rotation.y += delta * speed;
+    g.position.y = Math.sin(state.clock.elapsedTime * 0.2) * 0.5;
   });
 
   return (
