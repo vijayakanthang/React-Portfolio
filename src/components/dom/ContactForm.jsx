@@ -1,8 +1,11 @@
 import { useState } from "react";
+import emailjs from "emailjs-com";
 import { FiPhone, FiMail, FiSend, FiCopy, FiCheck } from "react-icons/fi";
 import { links } from "../../data/profile";
 
-const ENDPOINT = import.meta.env.VITE_FORMSPREE_ENDPOINT || "";
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID ;
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID ;
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
 export default function ContactForm() {
   const [method, setMethod] = useState("bottle");
@@ -34,16 +37,16 @@ export default function ContactForm() {
     }
     setStatus({ state: "sending", msg: "Sending your note into the world…" });
 
-    // Real submit when a Formspree endpoint is configured; otherwise fall
+    // Real submit via EmailJS when a template is configured; otherwise fall
     // back to the user's mail client so the message is never lost.
-    if (ENDPOINT) {
+    if (EMAILJS_TEMPLATE_ID) {
       try {
-        const res = await fetch(ENDPOINT, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify(form),
-        });
-        if (!res.ok) throw new Error("bad response");
+        await emailjs.send(
+          EMAILJS_SERVICE_ID,
+          EMAILJS_TEMPLATE_ID,
+          { name: form.name, email: form.email, message: form.message },
+          EMAILJS_PUBLIC_KEY
+        );
         setStatus({ state: "sent", msg: "Message received. I'll reply soon — thanks for reaching out." });
         setForm({ name: "", email: "", message: "" });
       } catch {

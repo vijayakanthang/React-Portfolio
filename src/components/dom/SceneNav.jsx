@@ -24,7 +24,7 @@ export default function SceneNav() {
         ))}
         <li>
           {/* recruiter fast path — straight to the PDF, no journey required */}
-          <a className="scene-nav-item nav-resume" href="/resume.pdf" target="_blank" rel="noreferrer">
+          <a className="scene-nav-item nav-resume" href="https://flowcv.com/resume/3l36i0wbrb" target="_blank" rel="noreferrer">
             <span className="lbl-always">RESUME</span>
           </a>
         </li>
